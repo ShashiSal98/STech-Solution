@@ -21,7 +21,7 @@
   "license": "MIT",
   "description": "Tailwind CSS Company Landing Page Template by Ranyeh.",
   "devDependencies": {
-    "tailwindcss": "^3.4.10",
+    "tailwindcss": "^3.4.19",
     "vite": "^6.3.4"
   }
 }
