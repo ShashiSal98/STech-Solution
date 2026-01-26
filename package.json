@@ -1,5 +1,5 @@
 {
-  "name": "inazuma-tailwind",
+  "name": "STiK Solution",
   "version": "1.0.0",
   "main": "index.html",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ranyeh24/inazuma-tailwind.git"
+    "url": "git+https://github.com/ShashiSal98/STiK-Solution.git"
   },
   "keywords": [
     "company",
