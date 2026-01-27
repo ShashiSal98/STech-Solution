@@ -17,9 +17,9 @@
     "company",
     "landing page"
   ],
-  "author": "Ranyeh",
+  "author": "Shashi Salwathura",
   "license": "MIT",
-  "description": "Tailwind CSS Company Landing Page Template by Ranyeh.",
+  "description": "STiK Solution software company website by Shashi Salwathura",
   "devDependencies": {
     "tailwindcss": "^3.4.19",
     "vite": "^6.3.4"
