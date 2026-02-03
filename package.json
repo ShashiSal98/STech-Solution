@@ -1,5 +1,5 @@
 {
-  "name": "STiK Solution",
+  "name": "STi Solution",
   "version": "1.0.0",
   "main": "index.html",
   "scripts": {
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ShashiSal98/STiK-Solution.git"
+    "url": "git+https://github.com/ShashiSal98/STi-Solution.git"
   },
   "keywords": [
     "company",
@@ -19,7 +19,7 @@
   ],
   "author": "Shashi Salwathura",
   "license": "MIT",
-  "description": "STiK Solution software company website by Shashi Salwathura",
+  "description": "STi Solution software company website by Shashi Salwathura",
   "devDependencies": {
     "tailwindcss": "^3.4.19",
     "vite": "^6.3.4"
