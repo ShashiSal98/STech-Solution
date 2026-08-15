@@ -2,75 +2,75 @@
   "rewrites": [
     {
       "source": "/dr-tank",
-      "destination": "https://dr-tank.vercel.app/"
+      "destination": "/api/proxy?target=https://dr-tank.vercel.app/"
     },
     {
       "source": "/dr-tank/:match*",
-      "destination": "https://dr-tank.vercel.app/:match*"
+      "destination": "/api/proxy?target=https://dr-tank.vercel.app/:match*"
     },
     {
       "source": "/4usdesigns",
-      "destination": "https://www.4usdesigns.com/"
+      "destination": "/api/proxy?target=https://www.4usdesigns.com/"
     },
     {
       "source": "/4usdesigns/:match*",
-      "destination": "https://www.4usdesigns.com/:match*"
+      "destination": "/api/proxy?target=https://www.4usdesigns.com/:match*"
     },
     {
       "source": "/lap57",
-      "destination": "https://my-site-4zkwah3n-shashisalwathura78.wix-vibe.com/"
+      "destination": "/api/proxy?target=https://my-site-4zkwah3n-shashisalwathura78.wix-vibe.com/"
     },
     {
       "source": "/lap57/:match*",
-      "destination": "https://my-site-4zkwah3n-shashisalwathura78.wix-vibe.com/:match*"
+      "destination": "/api/proxy?target=https://my-site-4zkwah3n-shashisalwathura78.wix-vibe.com/:match*"
     },
     {
       "source": "/shoety",
-      "destination": "https://shoe-ty.vercel.app/"
+      "destination": "/api/proxy?target=https://shoe-ty.vercel.app/"
     },
     {
       "source": "/shoety/:match*",
-      "destination": "https://shoe-ty.vercel.app/:match*"
+      "destination": "/api/proxy?target=https://shoe-ty.vercel.app/:match*"
     },
     {
       "source": "/johns-men-hairstylist",
-      "destination": "https://johns-men-hairstylist.vercel.app/"
+      "destination": "/api/proxy?target=https://johns-men-hairstylist.vercel.app/"
     },
     {
       "source": "/johns-men-hairstylist/:match*",
-      "destination": "https://johns-men-hairstylist.vercel.app/:match*"
+      "destination": "/api/proxy?target=https://johns-men-hairstylist.vercel.app/:match*"
     },
     {
       "source": "/laundry-depot",
-      "destination": "https://laundry-depot.vercel.app/"
+      "destination": "/api/proxy?target=https://laundry-depot.vercel.app/"
     },
     {
       "source": "/laundry-depot/:match*",
-      "destination": "https://laundry-depot.vercel.app/:match*"
+      "destination": "/api/proxy?target=https://laundry-depot.vercel.app/:match*"
     },
     {
       "source": "/two-conversations",
-      "destination": "https://two-conversations.vercel.app/"
+      "destination": "/api/proxy?target=https://two-conversations.vercel.app/"
     },
     {
       "source": "/two-conversations/:match*",
-      "destination": "https://two-conversations.vercel.app/:match*"
+      "destination": "/api/proxy?target=https://two-conversations.vercel.app/:match*"
     },
     {
       "source": "/salwathurajewellery",
-      "destination": "https://www.salwathurajewellery.lk/"
+      "destination": "/api/proxy?target=https://www.salwathurajewellery.lk/"
     },
     {
       "source": "/salwathurajewellery/:match*",
-      "destination": "https://www.salwathurajewellery.lk/:match*"
+      "destination": "/api/proxy?target=https://www.salwathurajewellery.lk/:match*"
     },
     {
       "source": "/invito",
-      "destination": "https://shashisal98.github.io/invito/"
+      "destination": "/api/proxy?target=https://shashisal98.github.io/invito/"
     },
     {
       "source": "/invito/:match*",
-      "destination": "https://shashisal98.github.io/invito/:match*"
+      "destination": "/api/proxy?target=https://shashisal98.github.io/invito/:match*"
     }
   ]
 }
