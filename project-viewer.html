@@ -5,18 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Project Viewer | STech Solution</title>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
-    iframe { width: 100%; height: 100%; border: none; display: block; }
+    :root {
+      --bg: #070b14;
+      --panel: #101827;
+      --text: #e5edf9;
+      --muted: #a8b5c7;
+      --accent: #4f8cff;
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .fallback {
+      display: none;
+      height: 100%;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+      text-align: center;
+      background: linear-gradient(180deg, #0b1220, #070b14);
+    }
+
+    .fallback-card {
+      max-width: 560px;
+      background: rgba(16, 24, 39, 0.9);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+    }
+
+    .fallback h1 {
+      margin: 0 0 16px;
+      font-size: clamp(1.6rem, 2vw, 2.3rem);
+    }
+
+    .fallback p {
+      margin: 0 0 18px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .fallback a {
+      display: inline-block;
+      padding: 12px 18px;
+      background: var(--accent);
+      color: white;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
-  <iframe id="viewer" src="" allowfullscreen></iframe>
+  <iframe id="viewer" title="Project preview" loading="eager" allowfullscreen></iframe>
+
+  <div id="fallback" class="fallback" role="alert">
+    <div class="fallback-card">
+      <h1>Project preview unavailable</h1>
+      <p>This project may block embedding in an iframe. You can open it directly in a new tab to view the full site with all styles and assets.</p>
+      <a id="direct-link" href="" target="_blank" rel="noopener noreferrer">Open project</a>
+    </div>
+  </div>
+
   <script>
     const urlParams = new URLSearchParams(window.location.search);
     const targetUrl = urlParams.get('url');
+    const viewer = document.getElementById('viewer');
+    const fallback = document.getElementById('fallback');
+    const directLink = document.getElementById('direct-link');
+
     if (targetUrl) {
-      document.getElementById('viewer').src = decodeURIComponent(targetUrl);
+      const decodedUrl = decodeURIComponent(targetUrl);
+      directLink.href = decodedUrl;
+      viewer.src = decodedUrl;
+
+      const onIframeError = () => {
+        viewer.style.display = 'none';
+        fallback.style.display = 'flex';
+      };
+
+      viewer.addEventListener('error', onIframeError);
+
+      setTimeout(() => {
+        const iframeDoc = viewer.contentDocument || viewer.contentWindow?.document;
+        if (iframeDoc && iframeDoc.body && iframeDoc.body.innerHTML.trim().length === 0) {
+          onIframeError();
+        }
+      }, 1500);
+    } else {
+      fallback.style.display = 'flex';
+      directLink.href = '/';
     }
   </script>
 </body>
