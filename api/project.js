@@ -7,7 +7,7 @@ const PROJECTS = {
   'laundry-depot': 'https://laundry-depot.vercel.app',
   'two-conversations': 'https://two-conversations.vercel.app',
   salwathurajewellery: 'https://www.salwathurajewellery.lk',
-  invito: 'https://shashisal98.github.io/invito'
+  invito: 'https://invito-tawny-tau.vercel.app/'
 };
 
 function rewriteAssetUrls(html, baseUrl) {
