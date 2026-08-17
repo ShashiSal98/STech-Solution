@@ -64,15 +64,7 @@
       "source": "/salwathurajewellery/:path*",
       "destination": "/api/project?project=salwathurajewellery&path=/:path*"
     },
-    {
-      "source": "/invito",
-      "destination": "/api/project?project=invito"
-    },
-    {
-      "source": "/invito/:path*",
-      "destination": "/api/project?project=invito&path=/:path*"
-    },
-   
+
     {
       "source": "/invito/shashi_thimira",
       "destination": "/api/project?project=shashi_thimira"
@@ -81,8 +73,7 @@
       "source": "/invito/shashi_thimira/:path*",
       "destination": "/api/project?project=shashi_thimira&path=/:path*"
     },
-
-     {
+    {
       "source": "/invito/kandyan",
       "destination": "/api/project?project=kandyan"
     },
@@ -90,10 +81,7 @@
       "source": "/invito/kandyan/:path*",
       "destination": "/api/project?project=kandyan&path=/:path*"
     },
-    
-
     {
-
       "source": "/invito/western",
       "destination": "/api/project?project=western"
     },
@@ -101,7 +89,6 @@
       "source": "/invito/western/:path*",
       "destination": "/api/project?project=western&path=/:path*"
     },
-
     {
       "source": "/invito/golden",
       "destination": "/api/project?project=golden"
@@ -110,7 +97,6 @@
       "source": "/invito/golden/:path*",
       "destination": "/api/project?project=golden&path=/:path*"
     },
-
     {
       "source": "/invito/cinematic-gold",
       "destination": "/api/project?project=cinematic-gold"
@@ -119,7 +105,6 @@
       "source": "/invito/cinematic-gold/:path*",
       "destination": "/api/project?project=cinematic-gold&path=/:path*"
     },
-
     {
       "source": "/invito/tamil-wedding",
       "destination": "/api/project?project=tamil-wedding"
@@ -128,7 +113,6 @@
       "source": "/invito/tamil-wedding/:path*",
       "destination": "/api/project?project=tamil-wedding&path=/:path*"
     },
-
     {
       "source": "/invito/opening",
       "destination": "/api/project?project=opening"
@@ -137,7 +121,6 @@
       "source": "/invito/opening/:path*",
       "destination": "/api/project?project=opening&path=/:path*"
     },
-
     {
       "source": "/invito/birthday",
       "destination": "/api/project?project=birthday"
@@ -145,7 +128,15 @@
     {
       "source": "/invito/birthday/:path*",
       "destination": "/api/project?project=birthday&path=/:path*"
-    }
+    },
 
+    {
+      "source": "/invito",
+      "destination": "/api/project?project=invito"
+    },
+    {
+      "source": "/invito/:path*",
+      "destination": "/api/project?project=invito&path=/:path*"
+    }
   ]
 }
