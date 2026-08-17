@@ -9,7 +9,7 @@ const PROJECTS = {
     salwathurajewellery: 'https://www.salwathurajewellery.lk',
     invito: 'https://invito-tawny-tau.vercel.app/',
     shashi_thimira: 'https://shashi-thimira.vercel.app/',
-    kandyan: 'https://shashisal98.github.io/kandyan/',
+    kandyan: 'https://kandyan-beryl.vercel.app/',
     western: 'https://western-wedding.vercel.app/',
     golden: 'https://golden-ashi-senuth.vercel.app/',
     'cinematic-gold': 'https://cinematic-gold.vercel.app/',
