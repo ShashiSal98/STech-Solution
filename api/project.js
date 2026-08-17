@@ -7,29 +7,27 @@ const PROJECTS = {
     'laundry-depot': 'https://laundry-depot.vercel.app',
     'two-conversations': 'https://two-conversations.vercel.app',
     salwathurajewellery: 'https://www.salwathurajewellery.lk',
-    invito: 'https://invito-tawny-tau.vercel.app/',
-    shashi_thimira: 'https://shashi-thimira.vercel.app/',
-    kandyan: 'https://kandyan-beryl.vercel.app/',
-    western: 'https://western-wedding.vercel.app/',
-    golden: 'https://golden-ashi-senuth.vercel.app/',
-    'cinematic-gold': 'https://cinematic-gold.vercel.app/',
-    'tamil-wedding': 'https://tamil-wedding-phi.vercel.app/',
-    opening: 'https://opening-ten.vercel.app/',
-    birthday: 'https://birthday-alpha-seven-23.vercel.app/'
+    invito: 'https://invito-tawny-tau.vercel.app',
+    shashi_thimira: 'https://shashi-thimira.vercel.app',
+    kandyan: 'https://kandyan-beryl.vercel.app',
+    western: 'https://western-wedding.vercel.app',
+    golden: 'https://golden-ashi-senuth.vercel.app',
+    'cinematic-gold': 'https://cinematic-gold.vercel.app',
+    'tamil-wedding': 'https://tamil-wedding-phi.vercel.app',
+    opening: 'https://opening-ten.vercel.app',
+    birthday: 'https://birthday-alpha-seven-23.vercel.app'
 };
 
-function rewriteAssetUrls(html, baseUrl) {
-    const safeBase = baseUrl.replace(/\/$/, '');
+function rewriteAssetUrls(html, baseUrl, currentSearch) {
+    const safeBase = baseUrl.replace(/\/+$/, '');
 
     const rewriteMatch = (match, attr, value) => {
         if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
             return match;
         }
-
         if (/^(https?:)?\/\//i.test(value)) {
             return match;
         }
-
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `${attr}="${fullUrl}"`;
@@ -46,11 +44,9 @@ function rewriteAssetUrls(html, baseUrl) {
         if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
             return match;
         }
-
         if (/^(https?:)?\/\//i.test(value)) {
             return match;
         }
-
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `url(${quote}${fullUrl}${quote})`;
@@ -59,8 +55,30 @@ function rewriteAssetUrls(html, baseUrl) {
         }
     });
 
-    if (!/<base\s+/i.test(rewritten)) {
-        rewritten = rewritten.replace(/<head>/i, `<head><base href="${safeBase}/">`);
+    // Inject query helper script to ensure client-side DOM scripts can read parameters
+    const scriptInjection = `
+    <base href="${safeBase}/">
+    <script>
+      (function() {
+        try {
+          var currentParams = new URLSearchParams(window.location.search);
+          var guestName = currentParams.get('name');
+          if (guestName) {
+            window.GUEST_NAME = guestName;
+            document.addEventListener('DOMContentLoaded', function() {
+              var nameEls = document.querySelectorAll('[data-guest-name], #guest-name, .guest-name, #name');
+              nameEls.forEach(function(el) { el.textContent = guestName; });
+            });
+          }
+        } catch(e) {}
+      })();
+    </script>
+    `;
+
+    if (/<head>/i.test(rewritten)) {
+        rewritten = rewritten.replace(/<head>/i, `<head>${scriptInjection}`);
+    } else {
+        rewritten = scriptInjection + rewritten;
     }
 
     return rewritten;
@@ -69,7 +87,7 @@ function rewriteAssetUrls(html, baseUrl) {
 module.exports = async function handler(req, res) {
     const url = new URL(req.url, 'https://www.stechsolution.lk');
     const project = url.searchParams.get('project');
-    const rawPath = url.searchParams.get('path') || '/';
+    const rawPath = url.searchParams.get('path') || '';
 
     if (!project || !PROJECTS[project]) {
         res.status(404).send('Project not found');
@@ -77,9 +95,14 @@ module.exports = async function handler(req, res) {
     }
 
     const baseUrl = PROJECTS[project].replace(/\/+$/, '');
-    const cleanPath = rawPath.replace(/^\/+/, '');
 
-    // Collect all forwarded query parameters except 'project' and 'path'
+    // Normalize path by stripping double slashes
+    let cleanPath = rawPath.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (cleanPath === '/' || cleanPath === 'undefined') {
+        cleanPath = '';
+    }
+
+    // Extract non-routing query parameters
     const forwardParams = new URLSearchParams();
     for (const [key, value] of url.searchParams.entries()) {
         if (key !== 'project' && key !== 'path') {
@@ -88,7 +111,7 @@ module.exports = async function handler(req, res) {
     }
 
     const queryString = forwardParams.toString() ? `?${forwardParams.toString()}` : '';
-    const targetUrl = `${baseUrl}/${cleanPath}${queryString}`;
+    const targetUrl = `${baseUrl}${cleanPath ? `/${cleanPath}` : ''}${queryString}`;
 
     try {
         const response = await fetch(targetUrl, {
@@ -108,11 +131,10 @@ module.exports = async function handler(req, res) {
         if (contentType.includes('text/html')) {
             const body = await response.text();
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            res.status(200).send(rewriteAssetUrls(body, baseUrl));
+            res.status(200).send(rewriteAssetUrls(body, baseUrl, queryString));
             return;
         }
 
-        // Return binary/asset streams directly using arrayBuffer
         const buffer = await response.arrayBuffer();
         res.setHeader('Content-Type', contentType);
         res.status(200).send(Buffer.from(buffer));
