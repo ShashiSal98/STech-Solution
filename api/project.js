@@ -7,39 +7,54 @@ const PROJECTS = {
     'laundry-depot': 'https://laundry-depot.vercel.app',
     'two-conversations': 'https://two-conversations.vercel.app',
     salwathurajewellery: 'https://www.salwathurajewellery.lk',
-    invito: 'https://invito-tawny-tau.vercel.app',
-    shashi_thimira: 'https://shashi-thimira.vercel.app',
-    kandyan: 'https://kandyan-beryl.vercel.app',
-    western: 'https://western-wedding.vercel.app',
-    golden: 'https://golden-ashi-senuth.vercel.app',
-    'cinematic-gold': 'https://cinematic-gold.vercel.app',
-    'tamil-wedding': 'https://tamil-wedding-phi.vercel.app',
-    opening: 'https://opening-ten.vercel.app',
-    birthday: 'https://birthday-alpha-seven-23.vercel.app'
+    invito: 'https://invito-tawny-tau.vercel.app/',
+    shashi_thimira: 'https://shashi-thimira.vercel.app/',
+    kandyan: 'https://kandyan-beryl.vercel.app/',
+    western: 'https://western-wedding.vercel.app/',
+    golden: 'https://golden-ashi-senuth.vercel.app/',
+    'cinematic-gold': 'https://cinematic-gold.vercel.app/',
+    'tamil-wedding': 'https://tamil-wedding-phi.vercel.app/',
+    opening: 'https://opening-ten.vercel.app/',
+    birthday: 'https://birthday-alpha-seven-23.vercel.app/'
 };
 
 function rewriteAssetUrls(html, baseUrl) {
-    const safeBase = baseUrl.replace(/\/+$/, '');
+    const safeBase = baseUrl.replace(/\/$/, '');
 
     const rewriteMatch = (match, attr, value) => {
-        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) return match;
-        if (/^(https?:)?\/\//i.test(value)) return match;
+        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
+            return match;
+        }
+
+        if (/^(https?:)?\/\//i.test(value)) {
+            return match;
+        }
+
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `${attr}="${fullUrl}"`;
-        } catch {
+        } catch (error) {
             return match;
         }
     };
 
-    let rewritten = html.replace(/(href|src)=(['"])([^'"#?]+)(\2)/gi, rewriteMatch);
+    let rewritten = html.replace(/(href|src)=(['"])([^'"#?]+)(\2)/gi, (match, attr, quote, value) => {
+        return rewriteMatch(match, attr, value);
+    });
+
     rewritten = rewritten.replace(/url\((['"]?)([^)'"\s]+)\1\)/gi, (match, quote, value) => {
-        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) return match;
-        if (/^(https?:)?\/\//i.test(value)) return match;
+        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
+            return match;
+        }
+
+        if (/^(https?:)?\/\//i.test(value)) {
+            return match;
+        }
+
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `url(${quote}${fullUrl}${quote})`;
-        } catch {
+        } catch (error) {
             return match;
         }
     });
@@ -54,7 +69,7 @@ function rewriteAssetUrls(html, baseUrl) {
 module.exports = async function handler(req, res) {
     const url = new URL(req.url, 'https://www.stechsolution.lk');
     const project = url.searchParams.get('project');
-    const rawPath = url.searchParams.get('path') || '';
+    const rawPath = url.searchParams.get('path') || '/';
 
     if (!project || !PROJECTS[project]) {
         res.status(404).send('Project not found');
@@ -62,8 +77,9 @@ module.exports = async function handler(req, res) {
     }
 
     const baseUrl = PROJECTS[project].replace(/\/+$/, '');
-    const cleanPath = rawPath.replace(/^\/+/, '').replace(/\/+$/, '');
+    const cleanPath = rawPath.replace(/^\/+/, '');
 
+    // Collect all forwarded query parameters except 'project' and 'path'
     const forwardParams = new URLSearchParams();
     for (const [key, value] of url.searchParams.entries()) {
         if (key !== 'project' && key !== 'path') {
@@ -72,7 +88,7 @@ module.exports = async function handler(req, res) {
     }
 
     const queryString = forwardParams.toString() ? `?${forwardParams.toString()}` : '';
-    const targetUrl = `${baseUrl}${cleanPath ? `/${cleanPath}` : ''}${queryString}`;
+    const targetUrl = `${baseUrl}/${cleanPath}${queryString}`;
 
     try {
         const response = await fetch(targetUrl, {
@@ -96,10 +112,11 @@ module.exports = async function handler(req, res) {
             return;
         }
 
+        // Return binary/asset streams directly using arrayBuffer
         const buffer = await response.arrayBuffer();
         res.setHeader('Content-Type', contentType);
         res.status(200).send(Buffer.from(buffer));
-    } catch {
+    } catch (error) {
         res.status(502).send('Unable to load project preview');
     }
 };
