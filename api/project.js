@@ -69,16 +69,26 @@ function rewriteAssetUrls(html, baseUrl) {
 module.exports = async function handler(req, res) {
     const url = new URL(req.url, 'https://www.stechsolution.lk');
     const project = url.searchParams.get('project');
-    const path = url.searchParams.get('path') || '/';
+    const rawPath = url.searchParams.get('path') || '/';
 
     if (!project || !PROJECTS[project]) {
         res.status(404).send('Project not found');
         return;
     }
 
-    const baseUrl = PROJECTS[project];
-    const targetPath = path === '/' ? '' : path.replace(/^\/+/, '');
-    const targetUrl = new URL(targetPath ? `/${targetPath}` : '/', `${baseUrl}/`).toString();
+    const baseUrl = PROJECTS[project].replace(/\/+$/, '');
+    const cleanPath = rawPath.replace(/^\/+/, '');
+
+    // Collect all forwarded query parameters except 'project' and 'path'
+    const forwardParams = new URLSearchParams();
+    for (const [key, value] of url.searchParams.entries()) {
+        if (key !== 'project' && key !== 'path') {
+            forwardParams.append(key, value);
+        }
+    }
+
+    const queryString = forwardParams.toString() ? `?${forwardParams.toString()}` : '';
+    const targetUrl = `${baseUrl}/${cleanPath}${queryString}`;
 
     try {
         const response = await fetch(targetUrl, {
@@ -94,16 +104,18 @@ module.exports = async function handler(req, res) {
         }
 
         const contentType = response.headers.get('content-type') || 'text/html';
-        const body = await response.text();
 
         if (contentType.includes('text/html')) {
+            const body = await response.text();
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
             res.status(200).send(rewriteAssetUrls(body, baseUrl));
             return;
         }
 
+        // Return binary/asset streams directly using arrayBuffer
+        const buffer = await response.arrayBuffer();
         res.setHeader('Content-Type', contentType);
-        res.status(200).send(body);
+        res.status(200).send(Buffer.from(buffer));
     } catch (error) {
         res.status(502).send('Unable to load project preview');
     }
