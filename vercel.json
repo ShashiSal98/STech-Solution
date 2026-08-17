@@ -1,142 +1,89 @@
 {
+  "version": 2,
+  "cleanUrls": true,
+  "trailingSlash": false,
   "rewrites": [
-    {
-      "source": "/dr-tank",
-      "destination": "/api/project?project=dr-tank"
-    },
     {
       "source": "/dr-tank/:path*",
       "destination": "/api/project?project=dr-tank&path=/:path*"
     },
     {
-      "source": "/4usdesigns",
-      "destination": "/api/project?project=4usdesigns"
+      "source": "/dr-tank",
+      "destination": "/api/project?project=dr-tank"
     },
     {
       "source": "/4usdesigns/:path*",
       "destination": "/api/project?project=4usdesigns&path=/:path*"
     },
     {
-      "source": "/lap57",
-      "destination": "/api/project?project=lap57"
+      "source": "/4usdesigns",
+      "destination": "/api/project?project=4usdesigns"
     },
     {
       "source": "/lap57/:path*",
       "destination": "/api/project?project=lap57&path=/:path*"
     },
     {
-      "source": "/shoety",
-      "destination": "/api/project?project=shoety"
+      "source": "/lap57",
+      "destination": "/api/project?project=lap57"
     },
     {
       "source": "/shoety/:path*",
       "destination": "/api/project?project=shoety&path=/:path*"
     },
     {
-      "source": "/johns-men-hairstylist",
-      "destination": "/api/project?project=johns-men-hairstylist"
+      "source": "/shoety",
+      "destination": "/api/project?project=shoety"
     },
     {
       "source": "/johns-men-hairstylist/:path*",
       "destination": "/api/project?project=johns-men-hairstylist&path=/:path*"
     },
     {
-      "source": "/laundry-depot",
-      "destination": "/api/project?project=laundry-depot"
+      "source": "/johns-men-hairstylist",
+      "destination": "/api/project?project=johns-men-hairstylist"
     },
     {
       "source": "/laundry-depot/:path*",
       "destination": "/api/project?project=laundry-depot&path=/:path*"
     },
     {
-      "source": "/two-conversations",
-      "destination": "/api/project?project=two-conversations"
+      "source": "/laundry-depot",
+      "destination": "/api/project?project=laundry-depot"
     },
     {
       "source": "/two-conversations/:path*",
       "destination": "/api/project?project=two-conversations&path=/:path*"
     },
     {
-      "source": "/salwathurajewellery",
-      "destination": "/api/project?project=salwathurajewellery"
+      "source": "/two-conversations",
+      "destination": "/api/project?project=two-conversations"
     },
     {
       "source": "/salwathurajewellery/:path*",
       "destination": "/api/project?project=salwathurajewellery&path=/:path*"
     },
-
     {
-      "source": "/invito/shashi_thimira",
-      "destination": "/api/project?project=shashi_thimira"
-    },
-    {
-      "source": "/invito/shashi_thimira/:path*",
-      "destination": "/api/project?project=shashi_thimira&path=/:path*"
-    },
-    {
-      "source": "/invito/kandyan",
-      "destination": "/api/project?project=kandyan"
-    },
-    {
-      "source": "/invito/kandyan/:path*",
-      "destination": "/api/project?project=kandyan&path=/:path*"
-    },
-    {
-      "source": "/invito/western",
-      "destination": "/api/project?project=western"
-    },
-    {
-      "source": "/invito/western/:path*",
-      "destination": "/api/project?project=western&path=/:path*"
-    },
-    {
-      "source": "/invito/golden",
-      "destination": "/api/project?project=golden"
-    },
-    {
-      "source": "/invito/golden/:path*",
-      "destination": "/api/project?project=golden&path=/:path*"
-    },
-    {
-      "source": "/invito/cinematic-gold",
-      "destination": "/api/project?project=cinematic-gold"
-    },
-    {
-      "source": "/invito/cinematic-gold/:path*",
-      "destination": "/api/project?project=cinematic-gold&path=/:path*"
-    },
-    {
-      "source": "/invito/tamil-wedding",
-      "destination": "/api/project?project=tamil-wedding"
-    },
-    {
-      "source": "/invito/tamil-wedding/:path*",
-      "destination": "/api/project?project=tamil-wedding&path=/:path*"
-    },
-    {
-      "source": "/invito/opening",
-      "destination": "/api/project?project=opening"
-    },
-    {
-      "source": "/invito/opening/:path*",
-      "destination": "/api/project?project=opening&path=/:path*"
-    },
-    {
-      "source": "/invito/birthday",
-      "destination": "/api/project?project=birthday"
-    },
-    {
-      "source": "/invito/birthday/:path*",
-      "destination": "/api/project?project=birthday&path=/:path*"
+      "source": "/salwathurajewellery",
+      "destination": "/api/project?project=salwathurajewellery"
     },
 
     {
-      "source": "/invito",
-      "destination": "/api/project?project=invito"
+      "source": "/invito/:subproject/:path*",
+      "destination": "/api/project?project=:subproject&path=/:path*"
     },
+    {
+      "source": "/invito/:subproject",
+      "destination": "/api/project?project=:subproject"
+    },
+
     {
       "source": "/invito/:path*",
       "destination": "/api/project?project=invito&path=/:path*"
+    },
+    {
+      "source": "/invito",
+      "destination": "/api/project?project=invito"
     }
   ]
 }

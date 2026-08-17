@@ -18,67 +18,34 @@ const PROJECTS = {
     birthday: 'https://birthday-alpha-seven-23.vercel.app'
 };
 
-function rewriteAssetUrls(html, baseUrl, currentSearch) {
+function rewriteAssetUrls(html, baseUrl) {
     const safeBase = baseUrl.replace(/\/+$/, '');
 
     const rewriteMatch = (match, attr, value) => {
-        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
-            return match;
-        }
-        if (/^(https?:)?\/\//i.test(value)) {
-            return match;
-        }
+        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) return match;
+        if (/^(https?:)?\/\//i.test(value)) return match;
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `${attr}="${fullUrl}"`;
-        } catch (error) {
+        } catch {
             return match;
         }
     };
 
-    let rewritten = html.replace(/(href|src)=(['"])([^'"#?]+)(\2)/gi, (match, attr, quote, value) => {
-        return rewriteMatch(match, attr, value);
-    });
-
+    let rewritten = html.replace(/(href|src)=(['"])([^'"#?]+)(\2)/gi, rewriteMatch);
     rewritten = rewritten.replace(/url\((['"]?)([^)'"\s]+)\1\)/gi, (match, quote, value) => {
-        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) {
-            return match;
-        }
-        if (/^(https?:)?\/\//i.test(value)) {
-            return match;
-        }
+        if (!value || /^(data:|javascript:|mailto:|tel:|#|blob:)/i.test(value)) return match;
+        if (/^(https?:)?\/\//i.test(value)) return match;
         try {
             const fullUrl = new URL(value, `${safeBase}/`).toString();
             return `url(${quote}${fullUrl}${quote})`;
-        } catch (error) {
+        } catch {
             return match;
         }
     });
 
-    // Inject query helper script to ensure client-side DOM scripts can read parameters
-    const scriptInjection = `
-    <base href="${safeBase}/">
-    <script>
-      (function() {
-        try {
-          var currentParams = new URLSearchParams(window.location.search);
-          var guestName = currentParams.get('name');
-          if (guestName) {
-            window.GUEST_NAME = guestName;
-            document.addEventListener('DOMContentLoaded', function() {
-              var nameEls = document.querySelectorAll('[data-guest-name], #guest-name, .guest-name, #name');
-              nameEls.forEach(function(el) { el.textContent = guestName; });
-            });
-          }
-        } catch(e) {}
-      })();
-    </script>
-    `;
-
-    if (/<head>/i.test(rewritten)) {
-        rewritten = rewritten.replace(/<head>/i, `<head>${scriptInjection}`);
-    } else {
-        rewritten = scriptInjection + rewritten;
+    if (!/<base\s+/i.test(rewritten)) {
+        rewritten = rewritten.replace(/<head>/i, `<head><base href="${safeBase}/">`);
     }
 
     return rewritten;
@@ -95,14 +62,8 @@ module.exports = async function handler(req, res) {
     }
 
     const baseUrl = PROJECTS[project].replace(/\/+$/, '');
+    const cleanPath = rawPath.replace(/^\/+/, '').replace(/\/+$/, '');
 
-    // Normalize path by stripping double slashes
-    let cleanPath = rawPath.replace(/^\/+/, '').replace(/\/+$/, '');
-    if (cleanPath === '/' || cleanPath === 'undefined') {
-        cleanPath = '';
-    }
-
-    // Extract non-routing query parameters
     const forwardParams = new URLSearchParams();
     for (const [key, value] of url.searchParams.entries()) {
         if (key !== 'project' && key !== 'path') {
@@ -131,14 +92,14 @@ module.exports = async function handler(req, res) {
         if (contentType.includes('text/html')) {
             const body = await response.text();
             res.setHeader('Content-Type', 'text/html; charset=utf-8');
-            res.status(200).send(rewriteAssetUrls(body, baseUrl, queryString));
+            res.status(200).send(rewriteAssetUrls(body, baseUrl));
             return;
         }
 
         const buffer = await response.arrayBuffer();
         res.setHeader('Content-Type', contentType);
         res.status(200).send(Buffer.from(buffer));
-    } catch (error) {
+    } catch {
         res.status(502).send('Unable to load project preview');
     }
 };
