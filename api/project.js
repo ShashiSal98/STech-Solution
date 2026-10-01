@@ -15,7 +15,8 @@ const PROJECTS = {
     'cinematic-gold': 'https://cinematic-gold.vercel.app/',
     'tamil-wedding': 'https://tamil-wedding-phi.vercel.app/',
     opening: 'https://opening-ten.vercel.app/',
-    birthday: 'https://birthday-alpha-seven-23.vercel.app/'
+    birthday: 'https://birthday-alpha-seven-23.vercel.app/',
+    shashithimira: 'https://shashithimira.vercel.app/',
 };
 
 function rewriteAssetUrls(html, baseUrl) {
