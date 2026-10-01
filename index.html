@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+<<<<<<< HEAD
   <!-- Meta Tags -->
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -2206,6 +2207,190 @@
         },
       },
     });
+=======
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="pageTitle">You're Invited! 🎉</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <canvas id="canvas"></canvas>
+
+  <div class="wrapper">
+    <!-- Cover Overlay (Shown initially) -->
+    <div class="cover" id="cover" onclick="openInvitation()">
+      <div class="cover-icon">✉️</div>
+      <!-- Personalized Guest Name on Cover -->
+      <div class="guest-name-badge" id="coverGuestName">DEAR GUEST</div>
+      <h1>Special Invitation</h1>
+      <p id="coverSubtext">You are warmly invited to celebrate with us!</p>
+      <button class="open-btn">Open Invitation</button>
+    </div>
+
+    <!-- Main Invitation Details -->
+    <div class="card" id="card">
+      <span class="badge">Birthday Celebration</span>
+
+      <!-- Personalized Welcome in Card -->
+      <p class="guest-welcome" id="innerGuestName">Dear Friend,</p>
+
+      <h2>Alex's 25th Birthday</h2>
+      <p class="subtitle">Join us for an evening of food, drinks, and great music!</p>
+
+      <!-- Live Countdown Timer -->
+      <div class="countdown-container" id="countdown">
+        <div class="countdown-box">
+          <span class="number" id="days">00</span>
+          <span class="label">Days</span>
+        </div>
+        <div class="countdown-box">
+          <span class="number" id="hours">00</span>
+          <span class="label">Hours</span>
+        </div>
+        <div class="countdown-box">
+          <span class="number" id="minutes">00</span>
+          <span class="label">Mins</span>
+        </div>
+        <div class="countdown-box">
+          <span class="number" id="seconds">00</span>
+          <span class="label">Secs</span>
+        </div>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-item">
+          <span>📅</span>
+          <div class="info-text">
+            <strong>Saturday, August 15, 2026</strong>
+            <small>7:00 PM Onwards</small>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span>📍</span>
+          <div class="info-text">
+            <strong>The Rooftop Lounge</strong>
+            <small>123 Celebration Blvd, Downtown</small>
+          </div>
+        </div>
+
+        <div class="info-item">
+          <span>👔</span>
+          <div class="info-text">
+            <strong>Dress Code</strong>
+            <small>Smart Casual / Party Wear</small>
+          </div>
+        </div>
+      </div>
+
+      <a id="rsvpLink" href="https://wa.me/?text=I%20will%20be%20there!" target="_blank" class="rsvp-btn">RSVP Now</a>
+    </div>
+  </div>
+
+  <script>
+    // 0. URL Parameter එකෙන් Guest Name එක Personalise කිරීම (?name=Kolitha හෝ ?invitee=...)
+    (function personalizeGuestName() {
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('name') || params.get('invitee');
+      if (raw) {
+        const guestName = decodeURIComponent(raw).replace(/<[^>]*>?/gm, '').trim();
+        if (guestName) {
+          // Update Cover Name
+          const coverNameEl = document.getElementById('coverGuestName');
+          if (coverNameEl) coverNameEl.textContent = 'DEAR ' + guestName.toUpperCase();
+
+          // Update Inner Card Welcome Text
+          const innerNameEl = document.getElementById('innerGuestName');
+          if (innerNameEl) innerNameEl.textContent = 'Dear ' + guestName + ',';
+
+          // Update Page Title
+          document.title = 'Invitation for ' + guestName + ' 🎉';
+
+          // Update WhatsApp RSVP message with the name
+          const rsvpBtn = document.getElementById('rsvpLink');
+          if (rsvpBtn) {
+            rsvpBtn.href = `https://wa.me/?text=${encodeURIComponent('Hi! ' + guestName + ' will be there for Alex\'s Birthday!')}`;
+          }
+        }
+      }
+    })();
+
+    function openInvitation() {
+      document.getElementById('cover').classList.add('opened');
+      document.getElementById('card').classList.add('visible');
+      launchConfetti();
+    }
+
+    /* Countdown Timer Logic */
+    const eventDate = new Date('August 15, 2026 19:00:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const difference = eventDate - now;
+
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+
+        document.getElementById('days').innerText = days.toString().padStart(2, '0');
+        document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+        document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+        document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+      } else {
+        document.getElementById('countdown').innerHTML = "<strong style='color: var(--accent);'>The Event Has Started! 🥳</strong>";
+      }
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    /* Confetti Effect */
+    function launchConfetti() {
+      const canvas = document.getElementById('canvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+
+      const pieces = [];
+      const numberOfPieces = 100;
+      const colors = ['#ff5e7e', '#8854d0', '#ffd166', '#06d6a0', '#118ab2'];
+
+      for (let i = 0; i < numberOfPieces; i++) {
+        pieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 8 + 4,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speedY: Math.random() * 3 + 2,
+          speedX: Math.random() * 2 - 1,
+          rotation: Math.random() * 360
+        });
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        pieces.forEach((p) => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        if (pieces.some(p => p.y < canvas.height)) {
+          requestAnimationFrame(animate);
+        }
+      }
+
+      animate();
+    }
+>>>>>>> 69093aa5f7bc9c27d9791bd00bc50bda683a7a52
   </script>
 </body>
 
